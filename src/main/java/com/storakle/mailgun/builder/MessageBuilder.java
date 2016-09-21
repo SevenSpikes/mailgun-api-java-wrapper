@@ -184,6 +184,55 @@ public class MessageBuilder
         return this;
     }
 
+    public MessageBuilder setCampaign(String campaign)
+    {
+        this.campaign = campaign;
+
+        return this;
+    }
+
+    public MessageBuilder setTracking(Tracking tracking)
+    {
+        this.tracking = tracking;
+
+        return this;
+    }
+
+    public MessageBuilder setTrackingClicks(TrackingClicks trackingClicks)
+    {
+        this.trackingClicks = trackingClicks;
+
+        return this;
+    }
+
+    public MessageBuilder setTrackingOpens(TrackingOpens trackingOpens)
+    {
+        this.trackingOpens = trackingOpens;
+
+        return this;
+    }
+
+    public MessageBuilder setDeliveryTime(ZonedDateTime deliveryTime)
+    {
+        this.deliveryTime = deliveryTime;
+
+        return this;
+    }
+
+    public MessageBuilder setTestMode(TestMode testMode)
+    {
+        this.testMode = testMode;
+
+        return this;
+    }
+
+    public MessageBuilder setDkim(Dkim dkim)
+    {
+        this.dkim = dkim;
+
+        return this;
+    }
+
     public String getTestMode()
     {
         return testMode != null ? testMode.toString().toLowerCase() : null;

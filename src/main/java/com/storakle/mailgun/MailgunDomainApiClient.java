@@ -7,8 +7,6 @@ import feign.RequestLine;
 
 public interface MailgunDomainApiClient
 {
-    int MAXIMUM_RETURNED_RESULTS = 250;
-
     @RequestLine("GET /domains/{domain}")
     Domain getDomain(@Param("domain") String domain);
 

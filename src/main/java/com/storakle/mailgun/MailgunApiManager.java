@@ -58,7 +58,7 @@ public class MailgunApiManager
         return mailgunDomainApiClient;
     }
 
-    public ResponseMessage sendMessage(MessageBuilder messageBuilder)
+    public SendMessageResponse sendMessage(MessageBuilder messageBuilder)
     {
         String formattedDate = null;
 
@@ -86,6 +86,11 @@ public class MailgunApiManager
         return domain;
     }
 
+    public Domain getDomain(String domainName)
+    {
+        return getMailgunDomainApiClient().getDomain(domainName);
+    }
+
     public ResponseMessage deleteDomain(String domainName)
     {
         return getMailgunDomainApiClient().deleteDomain(domainName);
@@ -94,5 +99,41 @@ public class MailgunApiManager
     public DomainsList getDomains()
     {
         return getMailgunDomainApiClient().getDomains();
+    }
+
+    public ResponseMessage createWebhook(Webhook webhook)
+    {
+        return getMailgunApiClient().createWebhook(webhook.getId(), webhook.getUrl());
+    }
+
+    public ResponseMessage deleteWebhook(String id)
+    {
+        return getMailgunApiClient().deleteWbhook(id);
+    }
+
+    public CampaignList getCampaigns(Integer limit)
+    {
+        int campaignsLimit = ApiDefaultParameters.limit;
+        if(limit != null && limit > 0)
+        {
+            campaignsLimit = limit;
+        }
+
+        return getMailgunApiClient().getCampaigns(campaignsLimit);
+    }
+
+    public Campaign getCampaign(String id)
+    {
+        return getMailgunApiClient().getCampaign(id);
+    }
+
+    public ResponseMessage deleteCampaign(String id)
+    {
+        return getMailgunApiClient().deleteCampaign(id);
+    }
+
+    public ResponseMessage createCampaign(Campaign campaign)
+    {
+        return getMailgunApiClient().createCampaign(campaign.getId(), campaign.getName());
     }
 }

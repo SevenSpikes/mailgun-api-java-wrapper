@@ -40,4 +40,15 @@ public final class JsonConstants
     public static final String TAG = "o:tag";
     public static final String CAMPAIGN = "o:campaign";
     public static final String DELIVERY_TIME = "o:deliverytime";
+
+    // CAMPAIGN
+    public static final String DELIVERED_COUNT = "delivered_count";
+    public static final String CLICKED_COUNT = "clicked_count";
+    public static final String OPENED_COUNT = "opened_count";
+    public static final String SUMITTED_COUNT = "submitted_count";
+    public static final String UNSUBSCRIBED_COUNT = "unsubscribed_count";
+    public static final String BOUNCED_COUNT = "bounced_count";
+    public static final String COMPLAINED_COUNT = "complained_count";
+    public static final String DROPPED_COUNT = "dropped_count";
+    public static final String ID = "id";
 }
