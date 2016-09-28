@@ -69,10 +69,12 @@ public class MessageBuilder
     private String to;
 
     @JsonProperty(value = JsonConstants.CC)
+    @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private String cc;
 
     @JsonProperty(value = JsonConstants.BCC)
+    @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
     private String bcc;
 

@@ -27,6 +27,7 @@ public interface MailgunApiClient
     ResponseMessage deleteWbhook(@Param("id") String id);
 
     @RequestLine("GET /campaigns")
+    @Headers("Content-Type: application/json")
     CampaignList getCampaigns(@Param("limit") int limit);
 
     @RequestLine("GET /campaigns/{id}")
@@ -36,7 +37,7 @@ public interface MailgunApiClient
     @Headers("Content-Type: application/x-www-form-urlencoded")
     ResponseMessage createCampaign(@Param("id") String id, @Param("name") String name);
 
-    @RequestLine("POST /campaigns/{id}")
+    @RequestLine("DELETE /campaigns/{id}")
     ResponseMessage deleteCampaign(@Param("id") String id);
 
 //    @RequestLine("GET /campaigns/{id}/stats")
