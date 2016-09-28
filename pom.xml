@@ -6,7 +6,7 @@
 
     <groupId>com.storakle</groupId>
     <artifactId>mailgun</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -22,18 +22,13 @@
             </plugin>
         </plugins>
     </build>
-    <repositories>
-        <repository>
-            <id>feign-form</id>
-            <url>https://raw.github.com/xxlabaza/feign-form/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
     <dependencies>
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -77,9 +72,9 @@
         </dependency>
 
         <dependency>
-            <groupId>ru.xxlabaza</groupId>
+            <groupId>io.github.openfeign.form</groupId>
             <artifactId>feign-form</artifactId>
-            <version>1.0.1</version>
+            <version>2.0.2</version>
         </dependency>
         <dependency>
             <groupId>com.netflix.feign</groupId>

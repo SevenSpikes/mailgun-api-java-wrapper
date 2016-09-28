@@ -3,9 +3,9 @@ package com.storakle.mailgun;
 import feign.Feign;
 import feign.RequestInterceptor;
 import feign.auth.BasicAuthRequestInterceptor;
+import feign.form.FormEncoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
-import ru.xxlabaza.feign.form.FormEncoder;
 
 import java.util.ArrayList;
 

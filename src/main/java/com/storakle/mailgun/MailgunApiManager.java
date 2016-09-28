@@ -1,8 +1,8 @@
 package com.storakle.mailgun;
 
+import com.google.common.base.Strings;
 import com.storakle.mailgun.builder.MessageBuilder;
 import com.storakle.mailgun.domain.*;
-import org.assertj.core.util.Strings;
 
 import java.time.format.DateTimeFormatter;
 

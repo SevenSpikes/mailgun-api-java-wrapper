@@ -2,13 +2,13 @@ package com.storakle.mailgun.builder;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.Strings;
 import com.storakle.mailgun.domain.JsonConstants;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
-import org.assertj.core.util.Strings;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
