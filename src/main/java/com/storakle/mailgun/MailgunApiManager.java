@@ -1,7 +1,7 @@
 package com.storakle.mailgun;
 
 import com.google.common.base.Strings;
-import com.storakle.mailgun.builder.MessageBuilder;
+import com.storakle.mailgun.domain.Message;
 import com.storakle.mailgun.domain.*;
 
 import java.time.format.DateTimeFormatter;
@@ -9,9 +9,9 @@ import java.time.format.DateTimeFormatter;
 public class MailgunApiManager
 {
     private MailgunApiClient mailgunApiClient;
-    private MailgunDomainApiClient mailgunDomainApiClient;
     private String apiKey;
     private String domainName;
+    private MailgunApiFactory _mailgunApiFactory = new MailgunApiFactory();
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z");
 
@@ -28,7 +28,7 @@ public class MailgunApiManager
 
     private MailgunApiClient getMailgunApiClient()
     {
-        if(Strings.isNullOrEmpty(apiKey) || Strings.isNullOrEmpty(domainName))
+        if(Strings.isNullOrEmpty(apiKey))
         {
             throw new RuntimeException("The MailgunApiClient cannot be created, because one of the apiKey or domainName " +
                     "parameters is null or empty.");
@@ -36,47 +36,31 @@ public class MailgunApiManager
 
         if(mailgunApiClient == null)
         {
-            mailgunApiClient = MailgunApiFactory.createApiClient(apiKey, domainName);
+            mailgunApiClient = _mailgunApiFactory.createApiClient(apiKey);
         }
 
         return mailgunApiClient;
     }
 
-    private MailgunDomainApiClient getMailgunDomainApiClient()
-    {
-        if(Strings.isNullOrEmpty(apiKey))
-        {
-            throw new RuntimeException("The MailgunDomainApiClient cannot be created, because the apiKey " +
-                    "parameter is null or empty.");
-        }
-
-        if(mailgunDomainApiClient == null)
-        {
-            mailgunDomainApiClient = MailgunApiFactory.createDomainApiClient(apiKey);
-        }
-
-        return mailgunDomainApiClient;
-    }
-
-    public SendMessageResponse sendMessage(MessageBuilder messageBuilder)
+    public SendMessageResponse sendMessage(Message message)
     {
         String formattedDate = null;
 
-        if(messageBuilder.getDeliveryTime() != null)
+        if(message.getDeliveryTime() != null)
         {
-            formattedDate = messageBuilder.getDeliveryTime().format(FORMATTER);
+            formattedDate = message.getDeliveryTime().format(FORMATTER);
         }
 
-        return getMailgunApiClient().sendMessage(messageBuilder.getFrom(), messageBuilder.getTo(), messageBuilder.getSubject(),
-                messageBuilder.getText(), messageBuilder.getHtml(), messageBuilder.getTracking(),
-                messageBuilder.getTrackingClicks(), messageBuilder.getTrackingOpens(),
-                messageBuilder.getCampaign(), formattedDate, messageBuilder.getDkim(), messageBuilder.getTag(), messageBuilder.getCc(),
-                messageBuilder.getBcc());
+        return getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getTo(), message.getSubject(),
+                message.getText(), message.getHtml(), message.getTracking(),
+                message.getTrackingClicks(), message.getTrackingOpens(),
+                message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
+                message.getBcc());
     }
 
     public Domain createDomain(DomainContent domainContent)
     {
-        Domain domain = getMailgunDomainApiClient().createDomain(domainContent.getName(), domainContent.getSmtpPassword(), domainContent.getWildcard());
+        Domain domain = getMailgunApiClient().createDomain(domainContent.getName(), domainContent.getSmtpPassword(), domainContent.getWildcard());
 
         if(domain != null && !Strings.isNullOrEmpty(domain.getDomainContent().getName()))
         {
@@ -88,32 +72,32 @@ public class MailgunApiManager
 
     public Domain getDomain(String domainName)
     {
-        return getMailgunDomainApiClient().getDomain(domainName);
+        return getMailgunApiClient().getDomain(domainName);
     }
 
     public ResponseMessage deleteDomain(String domainName)
     {
-        return getMailgunDomainApiClient().deleteDomain(domainName);
+        return getMailgunApiClient().deleteDomain(domainName);
     }
 
     public DomainsList getDomains()
     {
-        return getMailgunDomainApiClient().getDomains();
+        return getMailgunApiClient().getDomains();
     }
 
     public WebhooksList getWebhooks()
     {
-        return getMailgunDomainApiClient().getWebhooks(domainName);
+        return getMailgunApiClient().getWebhooks(domainName);
     }
 
     public ResponseMessage createWebhook(WebhookType webhookType, String url)
     {
-        return getMailgunApiClient().createWebhook(webhookType.toString().toLowerCase(), url);
+        return getMailgunApiClient().createWebhook(domainName, webhookType.toString().toLowerCase(), url);
     }
 
     public ResponseMessage deleteWebhook(String id)
     {
-        return getMailgunApiClient().deleteWbhook(id);
+        return getMailgunApiClient().deleteWbhook(domainName, id);
     }
 
     public CampaignList getCampaigns(Integer limit)
@@ -124,21 +108,21 @@ public class MailgunApiManager
             campaignsLimit = limit;
         }
 
-        return getMailgunApiClient().getCampaigns(campaignsLimit);
+        return getMailgunApiClient().getCampaigns(domainName, campaignsLimit);
     }
 
     public Campaign getCampaign(String id)
     {
-        return getMailgunApiClient().getCampaign(id);
+        return getMailgunApiClient().getCampaign(domainName, id);
     }
 
     public ResponseMessage deleteCampaign(String id)
     {
-        return getMailgunApiClient().deleteCampaign(id);
+        return getMailgunApiClient().deleteCampaign(domainName, id);
     }
 
     public ResponseMessage createCampaign(Campaign campaign)
     {
-        return getMailgunApiClient().createCampaign(campaign.getId(), campaign.getName());
+        return getMailgunApiClient().createCampaign(domainName, campaign.getId(), campaign.getName());
     }
 }

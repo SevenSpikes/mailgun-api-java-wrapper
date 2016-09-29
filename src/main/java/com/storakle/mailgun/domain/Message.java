@@ -1,11 +1,9 @@
-package com.storakle.mailgun.builder;
+package com.storakle.mailgun.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Strings;
-import com.storakle.mailgun.domain.JsonConstants;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -14,9 +12,9 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MessageBuilder
+public class Message
 {
     public enum TestMode
     {
@@ -48,66 +46,73 @@ public class MessageBuilder
         NO
     }
 
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
     private List<String> toList = new ArrayList<>();
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
+
     private List<String> ccList = new ArrayList<>();
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
+
     private List<String> bccList = new ArrayList<>();
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
+
     private List<String> tagList = new ArrayList<>();
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.FROM)
     private String from;
 
     @JsonProperty(value = JsonConstants.TO)
-    @Getter(AccessLevel.NONE)
     private String to;
 
     @JsonProperty(value = JsonConstants.CC)
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
     private String cc;
 
     @JsonProperty(value = JsonConstants.BCC)
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
     private String bcc;
 
     @Getter(AccessLevel.NONE)
     private String tag;
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.SUBJECT)
     private String subject;
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.TEXT)
     private String text;
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.HTML)
     private String html;
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.CAMPAIGN)
     private String campaign;
 
+    @Setter
     @JsonProperty(value = JsonConstants.TEST_MODE)
     private TestMode testMode;
 
+    @Setter
     @JsonProperty(value = JsonConstants.DKMI)
     private Dkim dkim;
 
+    @Setter
     @JsonProperty(value = JsonConstants.TRACKING)
     private Tracking tracking;
 
+    @Setter
     @JsonProperty(value = JsonConstants.TRACKING_CLICKS)
     private TrackingClicks trackingClicks;
 
+    @Setter
     @JsonProperty(value = JsonConstants.TRACKING_OPENS)
     private TrackingOpens trackingOpens;
 
+    @Getter
+    @Setter
     @JsonProperty(value = JsonConstants.DELIVERY_TIME)
     private ZonedDateTime deliveryTime;
 
@@ -131,104 +136,104 @@ public class MessageBuilder
         return getJoinedString(tagList);
     }
 
-    public MessageBuilder addTo(String... toValues)
+    public Message addTo(String... toValues)
     {
         addListValueInternal(toValues, toList);
 
         return this;
     }
 
-    public MessageBuilder addCc(String... ccValues)
+    public Message addCc(String... ccValues)
     {
         addListValueInternal(ccValues, ccList);
 
         return this;
     }
 
-    public MessageBuilder addBcc(String... bccValues)
+    public Message addBcc(String... bccValues)
     {
         addListValueInternal(bccValues, bccList);
 
         return this;
     }
 
-    public MessageBuilder addTag(String... tag) {
+    public Message addTag(String... tag) {
         addListValueInternal(tag, tagList);
 
         return this;
     }
 
-    public MessageBuilder setFrom(String from)
+    public Message setFrom(String from)
     {
         this.from = from;
 
         return this;
     }
 
-    public MessageBuilder setSubject(String subject)
+    public Message setSubject(String subject)
     {
         this.subject = subject;
 
         return this;
     }
 
-    public MessageBuilder setText(String text)
+    public Message setText(String text)
     {
         this.text = text;
 
         return this;
     }
 
-    public MessageBuilder setHtml(String html)
+    public Message setHtml(String html)
     {
         this.html = html;
 
         return this;
     }
 
-    public MessageBuilder setCampaign(String campaign)
+    public Message setCampaign(String campaign)
     {
         this.campaign = campaign;
 
         return this;
     }
 
-    public MessageBuilder setTracking(Tracking tracking)
+    public Message setTracking(Tracking tracking)
     {
         this.tracking = tracking;
 
         return this;
     }
 
-    public MessageBuilder setTrackingClicks(TrackingClicks trackingClicks)
+    public Message setTrackingClicks(TrackingClicks trackingClicks)
     {
         this.trackingClicks = trackingClicks;
 
         return this;
     }
 
-    public MessageBuilder setTrackingOpens(TrackingOpens trackingOpens)
+    public Message setTrackingOpens(TrackingOpens trackingOpens)
     {
         this.trackingOpens = trackingOpens;
 
         return this;
     }
 
-    public MessageBuilder setDeliveryTime(ZonedDateTime deliveryTime)
+    public Message setDeliveryTime(ZonedDateTime deliveryTime)
     {
         this.deliveryTime = deliveryTime;
 
         return this;
     }
 
-    public MessageBuilder setTestMode(TestMode testMode)
+    public Message setTestMode(TestMode testMode)
     {
         this.testMode = testMode;
 
         return this;
     }
 
-    public MessageBuilder setDkim(Dkim dkim)
+    public Message setDkim(Dkim dkim)
     {
         this.dkim = dkim;
 

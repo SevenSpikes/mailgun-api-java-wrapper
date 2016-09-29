@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class MailgunApiFactory
 {
-    private static final String mailgunApiUrl = "https://api.mailgun.net/v3";
+    private final String mailgunApiUrl = "https://api.mailgun.net/v3";
 
-    public static MailgunApiClient createApiClient(String apiKey, String domainName)
+    public MailgunApiClient createApiClient(String apiKey)
     {
         // Prepare the request interceptors
         ArrayList<RequestInterceptor> requestInterceptors = new ArrayList<>();
@@ -25,21 +25,6 @@ public class MailgunApiFactory
                 .requestInterceptors(requestInterceptors)
 //                .logger(new Logger.JavaLogger().appendToFile("http.log"))
 //                .logLevel(Logger.Level.FULL)
-                .target(MailgunApiClient.class, mailgunApiUrl + "/" + domainName);
-    }
-
-    public static MailgunDomainApiClient createDomainApiClient(String apiKey)
-    {
-        // Prepare the request interceptors
-        ArrayList<RequestInterceptor> requestInterceptors = new ArrayList<>();
-        requestInterceptors.add(new BasicAuthRequestInterceptor("api", apiKey));
-
-        return Feign.builder()
-                .decoder(new JacksonDecoder())
-                .encoder(new FormEncoder(new JacksonEncoder()))
-                .requestInterceptors(requestInterceptors)
-//                .logger(new Logger.JavaLogger().appendToFile("http.log"))
-//                .logLevel(Logger.Level.FULL)
-                .target(MailgunDomainApiClient.class, mailgunApiUrl);
+                .target(MailgunApiClient.class, mailgunApiUrl);
     }
 }
