@@ -20,4 +20,10 @@ public interface MailgunDomainApiClient
 
     @RequestLine("GET /domains")
     DomainsList getDomains();
+
+    // This should be here, because the webhooks url structure is different than the other requests
+    // and the domain has to be passed separately.
+    @RequestLine("GET domains/{domain}/webhooks")
+    @Headers("Content-Type: application/json")
+    WebhooksList getWebhooks(@Param("domain") String domain);
 }

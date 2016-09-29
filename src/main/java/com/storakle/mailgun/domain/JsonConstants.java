@@ -51,4 +51,15 @@ public final class JsonConstants
     public static final String COMPLAINED_COUNT = "complained_count";
     public static final String DROPPED_COUNT = "dropped_count";
     public static final String ID = "id";
+
+    // WEBHOOK
+    public static final String URL = "url";
+    public static final String BOUNCE = "bounce";
+    public static final String DELIVER = "deliver";
+    public static final String DROP = "drop";
+    public static final String SPAM = "spam";
+    public static final String UNSUBSCRIBE = "unsubscribe";
+    public static final String CLICK = "click";
+    public static final String OPEN = "open";
+    public static final String WEBHOOKS = "webhooks";
 }

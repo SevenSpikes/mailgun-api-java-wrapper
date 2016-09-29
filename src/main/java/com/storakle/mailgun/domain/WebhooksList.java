@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Webhook
+public class WebhooksList
 {
-    @JsonProperty(value = JsonConstants.URL)
-    private String url;
+    @JsonProperty(value = JsonConstants.WEBHOOKS)
+    private Webhooks webhooks;
 }

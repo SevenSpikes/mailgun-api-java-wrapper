@@ -101,9 +101,14 @@ public class MailgunApiManager
         return getMailgunDomainApiClient().getDomains();
     }
 
-    public ResponseMessage createWebhook(Webhook webhook)
+    public WebhooksList getWebhooks()
     {
-        return getMailgunApiClient().createWebhook(webhook.getId(), webhook.getUrl());
+        return getMailgunDomainApiClient().getWebhooks(domainName);
+    }
+
+    public ResponseMessage createWebhook(WebhookType webhookType, String url)
+    {
+        return getMailgunApiClient().createWebhook(webhookType.toString().toLowerCase(), url);
     }
 
     public ResponseMessage deleteWebhook(String id)

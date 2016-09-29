@@ -1,9 +1,6 @@
 package com.storakle.mailgun;
 
-import com.storakle.mailgun.domain.Campaign;
-import com.storakle.mailgun.domain.CampaignList;
-import com.storakle.mailgun.domain.ResponseMessage;
-import com.storakle.mailgun.domain.SendMessageResponse;
+import com.storakle.mailgun.domain.*;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
