@@ -14,7 +14,7 @@ public interface MailgunApiClient
                                     @Param("o:tracking-clicks") String trackingClicks, @Param("o:tracking-opens") String trackingOpens,
                                     @Param("o:campaign") String campaign, @Param("o:deliverytime") String deliveryTime,
                                     @Param("o:dkim") String dkim, @Param("o:tag") String tag, @Param("cc") String cc,
-                                    @Param("bcc") String bcc);
+                                    @Param("bcc") String bcc, @Param("recipient-variables") String recipientVariables);
 
     @RequestLine("POST /{domain}/webhooks")
     @Headers("Content-Type: application/x-www-form-urlencoded")

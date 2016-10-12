@@ -121,6 +121,11 @@ public class Message
         return getJoinedString(toList);
     }
 
+    public List<String> getToList()
+    {
+        return toList;
+    }
+
     public String getCc()
     {
         return getJoinedString(ccList);

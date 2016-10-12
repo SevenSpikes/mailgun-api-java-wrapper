@@ -1,10 +1,13 @@
 package com.storakle.mailgun;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.storakle.mailgun.domain.Message;
 import com.storakle.mailgun.domain.*;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MailgunApiManager
 {
@@ -51,11 +54,47 @@ public class MailgunApiManager
             formattedDate = message.getDeliveryTime().format(FORMATTER);
         }
 
-        return getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getTo(), message.getSubject(),
-                message.getText(), message.getHtml(), message.getTracking(),
-                message.getTrackingClicks(), message.getTrackingOpens(),
-                message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
-                message.getBcc());
+        List<String> recipients = message.getToList();
+
+        List<List<String>> batchLists = Lists.partition(recipients, 1000);
+
+        List<SendMessageResponse> responses = new ArrayList<>();
+
+        for (List<String> recipientsBatch : batchLists)
+        {
+            List<String> rv = new ArrayList<>();
+            int id = 0;
+            for (String recipientEmail : recipientsBatch)
+            {
+                id++;
+                rv.add("\"" + recipientEmail + "\": {\"id\": " + id + "}");
+            }
+
+            String joined = String.join(", ", rv);
+
+            // recipient-variables='{"bob@example.com": {"first":"Bob", "id":1}, "alice@example.com": {"first":"Alice", "id": 2}}'
+            String recipientVariables = "{"+joined+"}";
+
+            String recipientsListString = String.join(", ", recipientsBatch);
+
+            SendMessageResponse response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                    message.getText(), message.getHtml(), message.getTracking(),
+                    message.getTrackingClicks(), message.getTrackingOpens(),
+                    message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
+                    message.getBcc(), recipientVariables);
+
+            responses.add(response);
+        }
+        return null;
+
+//        // recipient-variables='{"bob@example.com": {"first":"Bob", "id":1}, "alice@example.com": {"first":"Alice", "id": 2}}'
+//        String recipientVariables = "{}";
+//
+//        return getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getTo(), message.getSubject(),
+//                message.getText(), message.getHtml(), message.getTracking(),
+//                message.getTrackingClicks(), message.getTrackingOpens(),
+//                message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
+//                message.getBcc(), recipientVariables);
     }
 
     public Domain createDomain(DomainContent domainContent)
