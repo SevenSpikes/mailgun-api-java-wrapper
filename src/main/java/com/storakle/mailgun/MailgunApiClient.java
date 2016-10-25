@@ -58,6 +58,11 @@ public interface MailgunApiClient
     @Headers("Content-Type: application/json")
     WebhooksList getWebhooks(@Param("domain") String domain);
 
+
+    @RequestLine("POST /{domain}/unsubscribes")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    ResponseMessage unsubscribeRecipient(@Param("domain") String domain, @Param("address") String emailAddress, @Param("tag") String tag);
+
 //    @RequestLine("GET /campaigns/{id}/stats")
 //    ResponseMessage getCampaignStats(@Param("id") String id, @Param("groupby") String groupBy);
 //

@@ -164,4 +164,9 @@ public class MailgunApiManager
     {
         return getMailgunApiClient().createCampaign(domainName, campaign.getId(), campaign.getName());
     }
+
+    public ResponseMessage unsubscribeRecipient(String emailAddress, String tag)
+    {
+        return getMailgunApiClient().unsubscribeRecipient(domainName, emailAddress, tag);
+    }
 }
