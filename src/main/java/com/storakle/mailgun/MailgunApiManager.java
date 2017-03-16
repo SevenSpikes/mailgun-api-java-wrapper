@@ -77,11 +77,24 @@ public class MailgunApiManager
 
             String recipientsListString = String.join(", ", recipientsBatch);
 
-            SendMessageResponse response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), recipientsListString, message.getSubject(),
-                    message.getText(), message.getHtml(), message.getTracking(),
-                    message.getTrackingClicks(), message.getTrackingOpens(),
-                    message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
-                    message.getBcc(), recipientVariables);
+            SendMessageResponse response;
+
+            if (message.hasAttachment())
+            {
+                response = getMailgunApiClient().sendMessageWithAttachment(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                        message.getText(), message.getHtml(), message.getTracking(),
+                        message.getTrackingClicks(), message.getTrackingOpens(),
+                        message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
+                        message.getBcc(), recipientVariables, message.getAttachment());
+            }
+            else
+            {
+                response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                        message.getText(), message.getHtml(), message.getTracking(),
+                        message.getTrackingClicks(), message.getTrackingOpens(),
+                        message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
+                        message.getBcc(), recipientVariables);
+            }
 
             responses.add(response);
         }

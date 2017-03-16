@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.File;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Message
 {
+    private String attachment;
+
     public enum TestMode
     {
         YES
@@ -141,6 +144,29 @@ public class Message
         return getJoinedString(tagList);
     }
 
+    public Boolean hasAttachment()
+    {
+        if (!Strings.isNullOrEmpty(attachment))
+        {
+            File attachmentFile = new File(attachment);
+
+            return attachmentFile.exists() && !attachmentFile.isDirectory();
+        }
+        return false;
+    }
+
+    public File getAttachment()
+    {
+        File attachmentFile = new File(attachment);
+
+        if (attachmentFile.exists() && !attachmentFile.isDirectory())
+        {
+            return attachmentFile;
+        }
+
+        return null;
+    }
+
     public Message addTo(String... toValues)
     {
         addListValueInternal(toValues, toList);
@@ -164,6 +190,12 @@ public class Message
 
     public Message addTag(String... tag) {
         addListValueInternal(tag, tagList);
+
+        return this;
+    }
+
+    public Message setAttachment(String attachment) {
+        this.attachment = attachment;
 
         return this;
     }
