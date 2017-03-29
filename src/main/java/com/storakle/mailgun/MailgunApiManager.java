@@ -1,8 +1,10 @@
 package com.storakle.mailgun;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.storakle.mailgun.domain.Message;
 import com.storakle.mailgun.domain.*;
 
 import java.time.format.DateTimeFormatter;
@@ -45,39 +47,58 @@ public class MailgunApiManager
         return mailgunApiClient;
     }
 
-    public SendMessageResponse sendMessage(Message message)
+    public List<SendMessageResponse> sendMessage(Message message)
     {
-        String formattedDate = null;
-
-        if(message.getDeliveryTime() != null)
-        {
-            formattedDate = message.getDeliveryTime().format(FORMATTER);
-        }
-
-        List<String> recipients = message.getToList();
-
-        List<List<String>> batchLists = Lists.partition(recipients, 1000);
-
         List<SendMessageResponse> responses = new ArrayList<>();
 
-        for (List<String> recipientsBatch : batchLists)
+        // Create a batch of a 1000 email addresses. This is done because the Mailgin API has a limit of a 1000 emails
+        // per batch.
+        List<List<Recipient>> batchLists = Lists.partition(message.getRecipients(), 1000);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        for (List<Recipient> recipientsBatch : batchLists)
         {
-            List<String> rv = new ArrayList<>();
-            int id = 0;
-            for (String recipientEmail : recipientsBatch)
+            // We need the recipient emails, so that we know to which addresses the email should be send.
+            List<String> recipientEmails = new ArrayList<>();
+
+            ObjectNode recipientsObject = objectMapper.createObjectNode();
+
+            for (int i = 0; i < recipientsBatch.size(); i++)
             {
-                id++;
-                rv.add("\"" + recipientEmail + "\": {\"id\": " + id + "}");
+                Recipient recipient = recipientsBatch.get(i);
+
+                // Prepare the recipient variables object.
+                ObjectNode recipientVariablesObject = objectMapper.createObjectNode();
+                recipient.getVariables().forEach((key, value) -> recipientVariablesObject.put(key, value));
+                recipientVariablesObject.put("id", i + 1);
+
+                recipientEmails.add(recipient.getEmail());
+
+                recipientsObject.put(recipient.getEmail(), recipientVariablesObject);
             }
 
-            String joined = String.join(", ", rv);
-
             // recipient-variables='{"bob@example.com": {"first":"Bob", "id":1}, "alice@example.com": {"first":"Alice", "id": 2}}'
-            String recipientVariables = "{"+joined+"}";
+            String recipientVariables = "";
+            try
+            {
+                recipientVariables = objectMapper.writeValueAsString(recipientsObject);
+            }
+            catch (JsonProcessingException e)
+            {
+                e.printStackTrace();
+            }
 
-            String recipientsListString = String.join(", ", recipientsBatch);
+            String recipientsListString = String.join(", ", recipientEmails);
 
             SendMessageResponse response;
+
+            String formattedDate = null;
+
+            if(message.getDeliveryTime() != null)
+            {
+                formattedDate = message.getDeliveryTime().format(FORMATTER);
+            }
 
             if (message.hasAttachment())
             {
@@ -98,16 +119,8 @@ public class MailgunApiManager
 
             responses.add(response);
         }
-        return null;
 
-//        // recipient-variables='{"bob@example.com": {"first":"Bob", "id":1}, "alice@example.com": {"first":"Alice", "id": 2}}'
-//        String recipientVariables = "{}";
-//
-//        return getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getTo(), message.getSubject(),
-//                message.getText(), message.getHtml(), message.getTracking(),
-//                message.getTrackingClicks(), message.getTrackingOpens(),
-//                message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
-//                message.getBcc(), recipientVariables);
+        return responses;
     }
 
     public Domain createDomain(DomainContent domainContent)

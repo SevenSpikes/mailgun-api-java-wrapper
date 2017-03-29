@@ -49,21 +49,18 @@ public class Message
         NO
     }
 
-    private List<String> toList = new ArrayList<>();
-
     private List<String> ccList = new ArrayList<>();
 
     private List<String> bccList = new ArrayList<>();
 
     private List<String> tagList = new ArrayList<>();
 
+    private List<Recipient> recipients = new ArrayList<>();
+
     @Getter
     @Setter
     @JsonProperty(value = JsonConstants.FROM)
     private String from;
-
-    @JsonProperty(value = JsonConstants.TO)
-    private String to;
 
     @JsonProperty(value = JsonConstants.CC)
     private String cc;
@@ -119,16 +116,6 @@ public class Message
     @JsonProperty(value = JsonConstants.DELIVERY_TIME)
     private ZonedDateTime deliveryTime;
 
-    public String getTo()
-    {
-        return getJoinedString(toList);
-    }
-
-    public List<String> getToList()
-    {
-        return toList;
-    }
-
     public String getCc()
     {
         return getJoinedString(ccList);
@@ -167,9 +154,20 @@ public class Message
         return null;
     }
 
-    public Message addTo(String... toValues)
+    public List<Recipient> getRecipients()
     {
-        addListValueInternal(toValues, toList);
+        return recipients;
+    }
+
+    public Message setRecipient(List<Recipient> recipientValues)
+    {
+        for (Recipient value : recipientValues)
+        {
+            if (value != null && !recipients.contains(value))
+            {
+                recipients.add(value);
+            }
+        }
 
         return this;
     }
@@ -306,11 +304,11 @@ public class Message
     {
         if (provideValues != null)
         {
-            for (String email : provideValues)
+            for (String value : provideValues)
             {
-                if (StringUtils.isNotBlank(email) && !internalList.contains(email))
+                if (StringUtils.isNotBlank(value) && !internalList.contains(value))
                 {
-                    internalList.add(email);
+                    internalList.add(value);
                 }
             }
         }
