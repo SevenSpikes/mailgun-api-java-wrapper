@@ -47,13 +47,24 @@ public class MailgunApiManager
         return mailgunApiClient;
     }
 
-    public List<SendMessageResponse> sendMessage(Message message)
+    public SendMessageResponse sendMessage(Message message, String recipientEmail)
+    {
+        List<Recipient> recipients = new ArrayList<>();
+
+        recipients.add(new Recipient().setRecipient(recipientEmail));
+
+        List<SendMessageResponse> responses = sendMessage(message, recipients);
+
+        return responses.get(0);
+    }
+
+    public List<SendMessageResponse> sendMessage(Message message, List<Recipient> recipients)
     {
         List<SendMessageResponse> responses = new ArrayList<>();
 
         // Create a batch of a 1000 email addresses. This is done because the Mailgin API has a limit of a 1000 emails
         // per batch.
-        List<List<Recipient>> batchLists = Lists.partition(message.getRecipients(), 1000);
+        List<List<Recipient>> batchLists = Lists.partition(recipients, 1000);
 
         ObjectMapper objectMapper = new ObjectMapper();
 

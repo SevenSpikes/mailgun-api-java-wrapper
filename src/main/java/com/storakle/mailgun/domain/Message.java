@@ -55,8 +55,6 @@ public class Message
 
     private List<String> tagList = new ArrayList<>();
 
-    private List<Recipient> recipients = new ArrayList<>();
-
     @Getter
     @Setter
     @JsonProperty(value = JsonConstants.FROM)
@@ -152,24 +150,6 @@ public class Message
         }
 
         return null;
-    }
-
-    public List<Recipient> getRecipients()
-    {
-        return recipients;
-    }
-
-    public Message setRecipient(List<Recipient> recipientValues)
-    {
-        for (Recipient value : recipientValues)
-        {
-            if (value != null && !recipients.contains(value))
-            {
-                recipients.add(value);
-            }
-        }
-
-        return this;
     }
 
     public Message addCc(String... ccValues)
