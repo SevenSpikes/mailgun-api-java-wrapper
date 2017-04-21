@@ -43,7 +43,7 @@ public interface MailgunApiClient
     ResponseMessage createWebhook(@Param("domain") String domain, @Param("id") String id, @Param("url") String url);
 
     @RequestLine("POST /{domain}/webhooks/{id}")
-    ResponseMessage deleteWbhook(@Param("domain") String domain, @Param("id") String id);
+    ResponseMessage deleteWebhook(@Param("domain") String domain, @Param("id") String id);
 
     @RequestLine("GET /{domain}/campaigns")
     @Headers("Content-Type: application/json")
@@ -103,4 +103,8 @@ public interface MailgunApiClient
 //    @RequestLine("GET /campaigns/{id}/complaints")
 //    ResponseMessage getCampaignComplaints(@Param("id") String id, @Param("groupby") String groupBy, @Param("limit") int limit,
 //                                            @Param("page") int page);
+
+    @RequestLine("PUT domains/{domain}/verify")
+    @Headers("Content-Type: application/json")
+    ResponseMessage verifyDomain(@Param("domain") String domain);
 }

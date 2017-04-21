@@ -173,7 +173,7 @@ public class MailgunApiManager
 
     public ResponseMessage deleteWebhook(String id)
     {
-        return getMailgunApiClient().deleteWbhook(domainName, id);
+        return getMailgunApiClient().deleteWebhook(domainName, id);
     }
 
     public CampaignList getCampaigns(Integer limit)
@@ -205,5 +205,10 @@ public class MailgunApiManager
     public ResponseMessage unsubscribeRecipient(String emailAddress, String tag)
     {
         return getMailgunApiClient().unsubscribeRecipient(domainName, emailAddress, tag);
+    }
+
+    public ResponseMessage verifyDomain(String domainName)
+    {
+        return getMailgunApiClient().verifyDomain(domainName);
     }
 }
