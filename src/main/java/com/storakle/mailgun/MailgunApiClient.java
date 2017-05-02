@@ -66,7 +66,7 @@ public interface MailgunApiClient
     @RequestLine("POST /domains")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     Domain createDomain(@Param("name") String name, @Param("smtp_password") String smtp_password,
-                        @Param("wildcard") String wildcard);
+                        @Param("wildcard") Boolean wildcard);
 
     @RequestLine("DELETE /domains/{domain}")
     ResponseMessage deleteDomain(@Param("domain") String domain);

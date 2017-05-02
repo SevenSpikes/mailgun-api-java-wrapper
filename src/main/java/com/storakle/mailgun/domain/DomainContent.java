@@ -20,7 +20,7 @@ public class DomainContent
     private String smtpPassword;
 
     @JsonProperty(value = JsonConstants.WILDCARD)
-    private String wildcard;
+    private Boolean wildcard;
 
     @JsonProperty(value = JsonConstants.SPAM_ACTION)
     private String spamAction;
