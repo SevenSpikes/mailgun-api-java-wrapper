@@ -38,11 +38,11 @@ public interface MailgunApiClient
                                                   @Param("recipient-variables") String recipientVariables,
                                                   @Param("attachment") File attachments);
 
-    @RequestLine("POST /{domain}/webhooks")
+    @RequestLine("POST /domains/{domain}/webhooks")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     ResponseMessage createWebhook(@Param("domain") String domain, @Param("id") String id, @Param("url") String url);
 
-    @RequestLine("POST /{domain}/webhooks/{id}")
+    @RequestLine("POST /domains/{domain}/webhooks/{id}")
     ResponseMessage deleteWebhook(@Param("domain") String domain, @Param("id") String id);
 
     @RequestLine("GET /{domain}/campaigns")
@@ -76,7 +76,7 @@ public interface MailgunApiClient
 
     // This should be here, because the webhooks url structure is different than the other requests
     // and the domain has to be passed separately.
-    @RequestLine("GET domains/{domain}/webhooks")
+    @RequestLine("GET /domains/{domain}/webhooks")
     @Headers("Content-Type: application/json")
     WebhooksList getWebhooks(@Param("domain") String domain);
 
@@ -104,7 +104,7 @@ public interface MailgunApiClient
 //    ResponseMessage getCampaignComplaints(@Param("id") String id, @Param("groupby") String groupBy, @Param("limit") int limit,
 //                                            @Param("page") int page);
 
-    @RequestLine("PUT domains/{domain}/verify")
+    @RequestLine("PUT /domains/{domain}/verify")
     @Headers("Content-Type: application/json")
     ResponseMessage verifyDomain(@Param("domain") String domain);
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.storakle</groupId>
     <artifactId>mailgun</artifactId>
-    <version>0.1.12</version>
+    <version>0.1.13</version>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
