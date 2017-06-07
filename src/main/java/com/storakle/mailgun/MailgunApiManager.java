@@ -64,7 +64,7 @@ public class MailgunApiManager
 
         // Create a batch of a 1000 email addresses. This is done because the Mailgin API has a limit of a 1000 emails
         // per batch.
-        List<List<Recipient>> batchLists = Lists.partition(recipients, 1000);
+        List<List<Recipient>> batchLists = Lists.partition(recipients, 950);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
