@@ -82,7 +82,11 @@ public class MailgunApiManager
                 // Prepare the recipient variables object.
                 ObjectNode recipientVariablesObject = objectMapper.createObjectNode();
                 recipient.getVariables().forEach((key, value) -> recipientVariablesObject.put(key, value));
-                recipientVariablesObject.put("id", i + 1);
+
+                if(!recipientVariablesObject.has("id"))
+                {
+                    recipientVariablesObject.put("id", i + 1);
+                }
 
                 recipientEmails.add(recipient.getEmail());
 
