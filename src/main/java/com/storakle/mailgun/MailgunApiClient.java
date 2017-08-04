@@ -11,17 +11,29 @@ public interface MailgunApiClient
 {
     @RequestLine("POST /{domain}/messages")
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    SendMessageResponse sendMessage(@Param("domain") String domain, @Param("from") String from, @Param("to") String to, @Param("subject") String subject,
-                                    @Param("text") String text, @Param("html") String html, @Param("o:tracking") String tracking,
-                                    @Param("o:tracking-clicks") String trackingClicks, @Param("o:tracking-opens") String trackingOpens,
-                                    @Param("o:campaign") String campaign, @Param("o:deliverytime") String deliveryTime,
-                                    @Param("o:dkim") String dkim, @Param("o:tag") String tag, @Param("cc") String cc,
-                                    @Param("bcc") String bcc, @Param("recipient-variables") String recipientVariables);
+    SendMessageResponse sendMessage(@Param("domain") String domain,
+                                    @Param("from") String from,
+                                    @Param("h:reply-to") String replyTo,
+                                    @Param("to") String to,
+                                    @Param("subject") String subject,
+                                    @Param("text") String text,
+                                    @Param("html") String html,
+                                    @Param("o:tracking") String tracking,
+                                    @Param("o:tracking-clicks") String trackingClicks,
+                                    @Param("o:tracking-opens") String trackingOpens,
+                                    @Param("o:campaign") String campaign,
+                                    @Param("o:deliverytime") String deliveryTime,
+                                    @Param("o:dkim") String dkim,
+                                    @Param("o:tag") String tag,
+                                    @Param("cc") String cc,
+                                    @Param("bcc") String bcc,
+                                    @Param("recipient-variables") String recipientVariables);
 
     @RequestLine("POST /{domain}/messages")
     @Headers("Content-Type: multipart/form-data")
     SendMessageResponse sendMessageWithAttachment(@Param("domain") String domain,
                                                   @Param("from") String from,
+                                                  @Param("h:reply-to") String replyTo,
                                                   @Param("to") String to,
                                                   @Param("subject") String subject,
                                                   @Param("text") String text,

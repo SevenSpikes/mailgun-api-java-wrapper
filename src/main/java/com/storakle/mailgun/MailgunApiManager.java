@@ -114,7 +114,8 @@ public class MailgunApiManager
 
             if (message.hasAttachment())
             {
-                response = getMailgunApiClient().sendMessageWithAttachment(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                response = getMailgunApiClient().sendMessageWithAttachment(domainName, message.getFrom(), message.getReplyTo(),
+                        recipientsListString, message.getSubject(),
                         message.getText(), message.getHtml(), message.getTracking(),
                         message.getTrackingClicks(), message.getTrackingOpens(),
                         message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
@@ -122,7 +123,8 @@ public class MailgunApiManager
             }
             else
             {
-                response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getReplyTo(),
+                        recipientsListString, message.getSubject(),
                         message.getText(), message.getHtml(), message.getTracking(),
                         message.getTrackingClicks(), message.getTrackingOpens(),
                         message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),

@@ -60,6 +60,11 @@ public class Message
     @JsonProperty(value = JsonConstants.FROM)
     private String from;
 
+    @Getter
+    @Setter
+    @JsonProperty(value = JsonConstants.REPLY_TO)
+    private String replyTo;
+
     @JsonProperty(value = JsonConstants.CC)
     private String cc;
 
@@ -181,6 +186,13 @@ public class Message
     public Message setFrom(String from)
     {
         this.from = from;
+
+        return this;
+    }
+
+    public Message setReplyTo(String replyTo)
+    {
+        this.replyTo = replyTo;
 
         return this;
     }
