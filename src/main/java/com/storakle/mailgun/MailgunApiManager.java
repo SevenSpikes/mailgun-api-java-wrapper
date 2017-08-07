@@ -219,27 +219,32 @@ public class MailgunApiManager
     {
         List<Map<String, Recipient>> uniqueRecipientsPartitions = new ArrayList<>();
 
-        List<Recipient> remainingRecipients = recipientsList;
+        List<Recipient> remainingRecipients = new ArrayList<>(recipientsList);
 
         while (remainingRecipients.size() > 0)
         {
-            List<Recipient> partitionRemainingRecipients = new ArrayList<>();
-
             Map<String, Recipient> partition = new TreeMap<>();
 
-            for (Recipient recipient : remainingRecipients)
+            ListIterator<Recipient> iterator = remainingRecipients.listIterator();
+
+            while (iterator.hasNext())
             {
-                if (partition.size() < partitionSize && !partition.containsKey(recipient.getEmail()))
+                if (partition.size() < partitionSize)
                 {
-                    partition.put(recipient.getEmail(), recipient);
-                } else
+                    Recipient recipient = iterator.next();
+                    if (!partition.containsKey(recipient.getEmail()))
+                    {
+                        partition.put(recipient.getEmail(), recipient);
+                        iterator.remove();
+                    }
+                }
+                else
                 {
-                    partitionRemainingRecipients.add(recipient);
+                    break;
                 }
             }
 
             uniqueRecipientsPartitions.add(partition);
-            remainingRecipients = partitionRemainingRecipients;
         }
 
         return uniqueRecipientsPartitions;
