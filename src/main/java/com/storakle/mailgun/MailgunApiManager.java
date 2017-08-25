@@ -47,6 +47,11 @@ public class MailgunApiManager
         return mailgunApiClient;
     }
 
+    private String getMailgunApiUrl()
+    {
+        return _mailgunApiFactory.getMailgunApiUrl();
+    }
+
     public SendMessageResponse sendMessage(Message message, String recipientEmail)
     {
         List<Recipient> recipients = new ArrayList<>();
@@ -214,5 +219,34 @@ public class MailgunApiManager
     public ResponseMessage verifyDomain(String domainName)
     {
         return getMailgunApiClient().verifyDomain(domainName);
+    }
+
+    public EventList getEvents(long begin, long end, String ascending, Integer limit, String event)
+    {
+        return getMailgunApiClient().getEvents(domainName, begin, end, ascending, limit, event);
+    }
+
+    public EventList getEventsByPageToken(String urlWithToken)
+    {
+        // The urlWithToken that is returned by the mailgiun API contains the whole url.
+        // It should be split in order to get the token and make a request with it.
+        String token = null;
+        String mailgunApiUrl = getMailgunApiUrl();
+
+        String splitKey = mailgunApiUrl + "/" + domainName + "/events/";
+
+        String[] splitUrlAndToken = urlWithToken.split(splitKey);
+
+        if(splitUrlAndToken.length > 1)
+        {
+           token = splitUrlAndToken[1];
+        }
+
+        if(!Strings.isNullOrEmpty(token))
+        {
+            return getMailgunApiClient().getEventsByPageToken(domainName, token);
+        }
+
+        return null;
     }
 }

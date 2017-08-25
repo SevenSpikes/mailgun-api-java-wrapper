@@ -27,4 +27,9 @@ public class MailgunApiFactory
 //                .logLevel(Logger.Level.FULL)
                 .target(MailgunApiClient.class, mailgunApiUrl);
     }
+
+    public String getMailgunApiUrl()
+    {
+        return mailgunApiUrl;
+    }
 }

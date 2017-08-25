@@ -107,4 +107,14 @@ public interface MailgunApiClient
     @RequestLine("PUT /domains/{domain}/verify")
     @Headers("Content-Type: application/json")
     ResponseMessage verifyDomain(@Param("domain") String domain);
+
+    @RequestLine("GET /{domain}/events?begin={begin}&end={end}&limit={limit}&ascending={ascending}&event={event}")
+    @Headers("Content-Type: application/json")
+    EventList getEvents(@Param("domain") String domain, @Param("begin") long begin, @Param("end") long end,
+                           @Param("ascending") String ascending, @Param("limit") Integer limit,
+                           @Param("event") String event);
+
+    @RequestLine("GET /{domain}/events/{token}")
+    @Headers("Content-Type: application/json")
+    EventList getEventsByPageToken(@Param("domain") String domain, @Param("token") String token);
 }

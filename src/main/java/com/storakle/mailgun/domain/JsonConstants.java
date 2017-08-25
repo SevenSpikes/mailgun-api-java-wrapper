@@ -62,4 +62,16 @@ public final class JsonConstants
     public static final String CLICK = "click";
     public static final String OPEN = "open";
     public static final String WEBHOOKS = "webhooks";
+
+    // EVENT
+    public static final String EVENT = "event";
+    public static final String TAGS = "tags";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String RECIPIENT = "recipient";
+    public static final String NEXT_PAGE = "next";
+    public static final String PREVIOUS_PAGE = "previous";
+    public static final String LAST_PAGE = "last";
+    public static final String FIRST_PAGE = "first";
+
+    public static final String PAGING = "paging";
 }
