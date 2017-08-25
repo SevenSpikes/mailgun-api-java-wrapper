@@ -56,9 +56,12 @@ public class Message
     private List<String> tagList = new ArrayList<>();
 
     @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.FROM)
     private String from;
+
+    @Getter
+    @JsonProperty(value = JsonConstants.REPLY_TO)
+    private String replyTo;
 
     @JsonProperty(value = JsonConstants.CC)
     private String cc;
@@ -70,47 +73,36 @@ public class Message
     private String tag;
 
     @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.SUBJECT)
     private String subject;
 
     @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.TEXT)
     private String text;
 
     @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.HTML)
     private String html;
 
-    @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.CAMPAIGN)
     private String campaign;
 
-    @Setter
     @JsonProperty(value = JsonConstants.TEST_MODE)
     private TestMode testMode;
 
-    @Setter
     @JsonProperty(value = JsonConstants.DKMI)
     private Dkim dkim;
 
-    @Setter
     @JsonProperty(value = JsonConstants.TRACKING)
     private Tracking tracking;
 
-    @Setter
     @JsonProperty(value = JsonConstants.TRACKING_CLICKS)
     private TrackingClicks trackingClicks;
 
-    @Setter
     @JsonProperty(value = JsonConstants.TRACKING_OPENS)
     private TrackingOpens trackingOpens;
 
     @Getter
-    @Setter
     @JsonProperty(value = JsonConstants.DELIVERY_TIME)
     private ZonedDateTime deliveryTime;
 
@@ -185,6 +177,13 @@ public class Message
         return this;
     }
 
+    public Message setReplyTo(String replyTo)
+    {
+        this.replyTo = replyTo;
+
+        return this;
+    }
+
     public Message setSubject(String subject)
     {
         this.subject = subject;
@@ -211,6 +210,11 @@ public class Message
         this.campaign = campaign;
 
         return this;
+    }
+
+    public String getCampaign()
+    {
+        return this.campaign;
     }
 
     public Message setTracking(Tracking tracking)

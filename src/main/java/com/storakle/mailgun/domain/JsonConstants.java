@@ -26,6 +26,7 @@ public final class JsonConstants
 
     // MESSAGE
     public static final String FROM = "from";
+    public static final String REPLY_TO = "h:reply-to";
     public static final String TO = "to";
     public static final String CC = "cc";
     public static final String BCC = "bcc";

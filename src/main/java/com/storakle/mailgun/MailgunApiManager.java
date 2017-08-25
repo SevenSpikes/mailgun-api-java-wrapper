@@ -4,12 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.storakle.mailgun.domain.*;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MailgunApiManager
 {
@@ -69,21 +67,20 @@ public class MailgunApiManager
 
         // Create a batch of a 1000 email addresses. This is done because the Mailgin API has a limit of a 1000 emails
         // per batch.
-        List<List<Recipient>> batchLists = Lists.partition(recipients, 950);
+        List<Map<String, Recipient>> batchLists = partitionUnique(recipients, 950);// Lists.partition(recipients, 950);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        for (List<Recipient> recipientsBatch : batchLists)
+        for (Map<String, Recipient> recipientsBatch : batchLists)
         {
             // We need the recipient emails, so that we know to which addresses the email should be send.
             List<String> recipientEmails = new ArrayList<>();
 
             ObjectNode recipientsObject = objectMapper.createObjectNode();
 
-            for (int i = 0; i < recipientsBatch.size(); i++)
+            int i = 0;
+            for (Recipient recipient : recipientsBatch.values())
             {
-                Recipient recipient = recipientsBatch.get(i);
-
                 // Prepare the recipient variables object.
                 ObjectNode recipientVariablesObject = objectMapper.createObjectNode();
                 recipient.getVariables().forEach((key, value) -> recipientVariablesObject.put(key, value));
@@ -95,7 +92,7 @@ public class MailgunApiManager
 
                 recipientEmails.add(recipient.getEmail());
 
-                recipientsObject.put(recipient.getEmail(), recipientVariablesObject);
+                recipientsObject.set(recipient.getEmail(), recipientVariablesObject);
             }
 
             // recipient-variables='{"bob@example.com": {"first":"Bob", "id":1}, "alice@example.com": {"first":"Alice", "id": 2}}'
@@ -122,7 +119,8 @@ public class MailgunApiManager
 
             if (message.hasAttachment())
             {
-                response = getMailgunApiClient().sendMessageWithAttachment(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                response = getMailgunApiClient().sendMessageWithAttachment(domainName, message.getFrom(), message.getReplyTo(),
+                        recipientsListString, message.getSubject(),
                         message.getText(), message.getHtml(), message.getTracking(),
                         message.getTrackingClicks(), message.getTrackingOpens(),
                         message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
@@ -130,7 +128,8 @@ public class MailgunApiManager
             }
             else
             {
-                response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), recipientsListString, message.getSubject(),
+                response = getMailgunApiClient().sendMessage(domainName, message.getFrom(), message.getReplyTo(),
+                        recipientsListString, message.getSubject(),
                         message.getText(), message.getHtml(), message.getTracking(),
                         message.getTrackingClicks(), message.getTrackingOpens(),
                         message.getCampaign(), formattedDate, message.getDkim(), message.getTag(), message.getCc(),
@@ -221,6 +220,41 @@ public class MailgunApiManager
         return getMailgunApiClient().verifyDomain(domainName);
     }
 
+    public List<Map<String, Recipient>> partitionUnique(List<Recipient> recipientsList, Integer partitionSize)
+    {
+        List<Map<String, Recipient>> uniqueRecipientsPartitions = new ArrayList<>();
+
+        List<Recipient> remainingRecipients = new ArrayList<>(recipientsList);
+
+        while (remainingRecipients.size() > 0)
+        {
+            Map<String, Recipient> partition = new TreeMap<>();
+
+            ListIterator<Recipient> iterator = remainingRecipients.listIterator();
+
+            while (iterator.hasNext())
+            {
+                if (partition.size() < partitionSize)
+                {
+                    Recipient recipient = iterator.next();
+                    if (!partition.containsKey(recipient.getEmail()))
+                    {
+                        partition.put(recipient.getEmail(), recipient);
+                        iterator.remove();
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            uniqueRecipientsPartitions.add(partition);
+        }
+
+        return uniqueRecipientsPartitions;
+    }
+
     public EventList getEvents(long begin, long end, String ascending, Integer limit, String event)
     {
         return getMailgunApiClient().getEvents(domainName, begin, end, ascending, limit, event);
@@ -237,12 +271,12 @@ public class MailgunApiManager
 
         String[] splitUrlAndToken = urlWithToken.split(splitKey);
 
-        if(splitUrlAndToken.length > 1)
+        if (splitUrlAndToken.length > 1)
         {
-           token = splitUrlAndToken[1];
+            token = splitUrlAndToken[1];
         }
 
-        if(!Strings.isNullOrEmpty(token))
+        if (!Strings.isNullOrEmpty(token))
         {
             return getMailgunApiClient().getEventsByPageToken(domainName, token);
         }
